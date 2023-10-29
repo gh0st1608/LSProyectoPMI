@@ -1,6 +1,7 @@
 import http from "http";
 import https from "https";
 import fs from "fs";
+import path from "path"
 import { Bootstrap } from "./bootstrap";
 import EnvironmentVariables from "../services/app.service";
 import { Application } from "express";
@@ -14,8 +15,8 @@ export default class extends Bootstrap {
     return new Promise<boolean | Error>((resolve, reject) => {
       const server = http.createServer(this.app);
       const serverHttps = https.createServer({
-        cert: fs.readFileSync(__dirname + '/../certs/certificate.crt'),
-        key: fs.readFileSync(__dirname + '/../certs/private.key')
+        cert: fs.readFileSync(path.join(__dirname,'..','certs','certificate.crt')),
+        key: fs.readFileSync(path.join(__dirname,'..','certs','private.key'))
       },this.app);
       const PORT_HTTP = EnvironmentVariables.PORT_HTTP;
       const PORT_HTTPS = EnvironmentVariables.PORT_HTTPS;
