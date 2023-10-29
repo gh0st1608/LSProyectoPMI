@@ -15,8 +15,8 @@ export default class extends Bootstrap {
     return new Promise<boolean | Error>((resolve, reject) => {
       const server = http.createServer(this.app);
       const serverHttps = https.createServer({
-        cert: fs.readFileSync(path.join(__dirname,'..','certs','certificate.crt')),
-        key: fs.readFileSync(path.join(__dirname,'..','certs','private.key'))
+        cert: fs.readFileSync(path.join(__dirname,'..','..','certs','certificate.crt')),
+        key: fs.readFileSync(path.join(__dirname,'..','..','certs','private.key'))
       },this.app);
       const PORT_HTTP = EnvironmentVariables.PORT_HTTP;
       const PORT_HTTPS = EnvironmentVariables.PORT_HTTPS;

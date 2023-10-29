@@ -29,28 +29,22 @@ export default class Util {
     }
 
     static async makeDirs() : Promise<void> {
-      const pathSource = path.join(__dirname,'/../')
+      const pathSource = path.join(__dirname,'..')
       const pathQr = pathSource + '/uploads/qr'
       const pathMailing = pathSource + '/resources/mailing'
       const pathCerts = pathSource + '/certs'
       fs.mkdirSync(pathQr,{recursive:true});
       fs.mkdirSync(pathMailing,{recursive:true});
-      fs.mkdirSync(pathCerts,{recursive:true});
+      fs.mkdirSync(pathCerts);
     }
 
     static async copyFile() : Promise<void> {
-      const pathSourcePdf = path.join(__dirname,'/../../','/src/resources/mailing/programa.pdf')
-      const pathSourceHtml = path.join(__dirname,'/../../','/src/resources/mailing/template.html')
-      const pathTargetPdf = path.join(__dirname,'/../','/resources/mailing/programa.pdf')
-      const pathTargetHtml = path.join(__dirname,'/../','/resources/mailing/template.html')
-      const pathSourceCert = path.join(__dirname,'/../../','/src/certs/certificate.crt')
-      const pathSourcePriv = path.join(__dirname,'/../../','/src/certs/private.key')
-      const pathTargetCert = path.join(__dirname,'/../','/certs/certificate.crt')
-      const pathTargetPriv = path.join(__dirname,'/../','/certs/private.key')
+      const pathSourcePdf = path.join(__dirname,'..','..','/src/resources/mailing/programa.pdf')
+      const pathSourceHtml = path.join(__dirname,'..','..','/src/resources/mailing/template.html')
+      const pathTargetPdf = path.join(__dirname,'..','/resources/mailing/programa.pdf')
+      const pathTargetHtml = path.join(__dirname,'..','/resources/mailing/template.html')
       fs.copyFileSync(pathSourcePdf,pathTargetPdf)
       fs.copyFileSync(pathSourceHtml,pathTargetHtml)
-      fs.copyFileSync(pathSourceCert,pathTargetCert)
-      fs.copyFileSync(pathSourcePriv,pathTargetPriv)
     }
 
     static async sleep (ms : number){

@@ -33,9 +33,10 @@ ProyectoQR-Backend/mock
 ProyectoQR-Backend/dist
 ProyectoQR-Backend/deploy
 ProyectoQR-Backend/Dockerfile.backend.dev
-ProyectoQR-Backend/src/certs
+ProyectoQR-Backend/certs
 ProyectoQR-Backend/src/resources/mailing/adjunto.pdf
 ProyectoQR-Backend/src/resources/mailing/programa.pdf
 ProyectoQR-Backend/src/resources/mailing/template.html
+
 
 Docker-compose.dev.yml

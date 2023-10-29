@@ -11,7 +11,7 @@ export default class {
   }
 
   static get HOSTNAME(): number {
-    return process.env.HOSTNAME || env.HOSTNAME || 'http://localhost';
+    return process.env.HOSTNAME || env.HOSTNAME || 'https://localhost';
   }
 
   static get MONGO_HOST(): string {
