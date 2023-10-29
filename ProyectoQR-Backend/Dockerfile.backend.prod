@@ -1,0 +1,17 @@
+FROM node:16.1-alpine3.13
+
+#ARG BASE_DIR="app-ms"
+
+WORKDIR /app/backend
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
+#COPY env.yaml gulpfile.js tsconfig.json tslint.json .
+
+RUN npm run build
+
+CMD ["npm", "run", "serve"]
