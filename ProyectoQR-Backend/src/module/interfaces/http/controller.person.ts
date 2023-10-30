@@ -118,7 +118,6 @@ export default class {
       const participants = await this.application.countParticipants(user);
       res.send ({cantidad : participants}) 
     
- 
   }
 
 

@@ -14,7 +14,7 @@ export default class extends Bootstrap {
 
       const connectionString = EnvironmentVariables.MONGO_HOST != '127.0.0.1' 
       ? `mongodb+srv://${username}:${password}@${host}/${database}?authSource=${authSource}&retryWrites=true&w=majority`
-      : `mongodb://${username}:${password}@${host}:${port}/${database}?authSource=${authSource}&retryWrites=true&w=majority` 
+      : `mongodb://${username}:${password}@${host}:${port}/${database}?authSource=${authSource}&retryWrites=true&w=majority`
 
       const options = {
         minPoolSize: 5,

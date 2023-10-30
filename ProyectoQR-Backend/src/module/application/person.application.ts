@@ -18,7 +18,7 @@ export default class PersonApplication {
 
   async insertFile(filename : any) : Promise<void>{
     const jsonFile = await UtilService.readFile(filename);
-    
+    console.log(jsonFile)
     jsonFile.forEach(async (item : Person) => {
       const objPerson = new Person(
         item.id,
@@ -35,7 +35,7 @@ export default class PersonApplication {
         objPerson.urlQr = await QrService.saveQrToS3(objPerson.documento.toString())
         await this.create(objPerson)  
     })
-
+    console.log('ANTES DE ENTRAR AL JOBSENDMAIL')
     await UtilService.sleep(10000)
     await this.jobSendMail()
   }
@@ -51,6 +51,7 @@ export default class PersonApplication {
       arrayNombres.push(item.nombres)
       arrayQrs.push(item.urlQr)
     })
+    console.log('ENTRO AL JOBSENDMANIL')
     await UtilService.jobProcess(arrayCorreos,arrayNombres,arrayQrs)
     
   }

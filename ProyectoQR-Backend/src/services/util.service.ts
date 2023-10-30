@@ -53,6 +53,12 @@ export default class Util {
     const conDb = AppService.MONGO_HOST != '127.0.0.1' 
       ? `mongodb+srv://${AppService.MONGO_USERNAME}:${AppService.MONGO_PASSWORD}@${AppService.MONGO_HOST}/asistencia?authSource=admin&retryWrites=true&w=majority`
       : `mongodb://${AppService.MONGO_USERNAME}:${AppService.MONGO_PASSWORD}@${AppService.MONGO_HOST}:${AppService.MONGO_PORT}/asistencia?authSource=admin&retryWrites=true&w=majority` 
+    console.log(conDb)
+    console.log(arrayCorreos,arrayNombres,arrayQrs)
+    console.log(AppService.MONGO_HOST)
+    console.log(AppService.MONGO_USERNAME)
+    console.log(AppService.MONGO_PASSWORD)
+    console.log(AppService.MONGO_PORT)
 
     const agenda = new Agenda({db: {address: conDb}});
     agenda.define('sendMail', function() : any {
