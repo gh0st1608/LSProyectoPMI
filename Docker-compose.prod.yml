@@ -8,7 +8,7 @@ services:
     image: image-app-frontend-qr-prod
     container_name: ctn-app-frontend-qr-prod
     ports:
-    - "80:80"
+    - "8080:8080"
     restart: always
     networks:
       - net-app-qr-prod
@@ -36,6 +36,23 @@ services:
     volumes:
       - ./ProyectoQR-Backend/src:/app/backend/src
       - ./ProyectoQR-Backend/certs:/app/backend/certs
+  
+  app-gateway-qr-prod:
+    restart: always
+    build:
+        dockerfile: Dockerfile.gateway.prod
+        context: ./ProyectoQR-Gateway
+    image: image-app-gateway-qr-prod
+    container_name: ctn-app-gateway-qr-prod
+    ports:
+        - "80:80"
+        - "443:443"
+    volumes: 
+        - ./ProyectoQR-Gateway/letsencrypt:/etc/letsencrypt
+      # - ./web/src:/usr/share/nginx
+        - ./ProyectoQR-Gateway/certbot/certbot-var:/var/lib/letsencrypt
+    networks:
+      - net-app-qr-prod
 
 networks:
   net-app-qr-prod:
