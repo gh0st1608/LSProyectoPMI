@@ -1,0 +1,58 @@
+version: '3.1'
+
+services:
+  app-frontend-qr-prod:
+    build:
+      dockerfile: Dockerfile.frontend.prod
+      context: ./ProyectoQR-Frontend
+    image: image-app-frontend-qr-prod
+    container_name: ctn-app-frontend-qr-prod
+    ports:
+    - "8080:8080"
+    restart: always
+    networks:
+      - net-app-qr-prod
+    volumes:
+       - ./ProyectoQR-Frontend/src:/app/frontend/src
+       - ./ProyectoQR-Frontend/public:/app/frontend/public
+      
+  app-backend-qr-prod:
+    build:
+      dockerfile: Dockerfile.backend.prod
+      context: ./ProyectoQR-Backend
+    image: image-app-backend-qr-prod
+    container_name: ctn-app-backend-qr-prod
+    ports:
+    - "8001:8001"
+    - "8000:8000"
+    environment:
+      - MONGO_HOST=clusterdev.hkpq9.mongodb.net
+      - MONGO_PORT=27017
+      - MONGO_USERNAME=mongodbdev
+      - MONGO_PASSWORD=mongobddev
+    restart: always
+    networks:
+      - net-app-qr-prod
+    volumes:
+      - ./ProyectoQR-Backend/src:/app/backend/src
+      - ./ProyectoQR-Backend/certs:/app/backend/certs
+  
+  app-gateway-qr-prod:
+    restart: always
+    build:
+        dockerfile: Dockerfile.gateway.prod
+        context: ./ProyectoQR-Gateway
+    image: image-app-gateway-qr-prod
+    container_name: ctn-app-gateway-qr-prod
+    ports:
+        - "80:80"
+        - "443:443"
+    volumes: 
+        - ./ProyectoQR-Gateway/letsencrypt:/etc/letsencrypt
+      # - ./web/src:/usr/share/nginx
+        - ./ProyectoQR-Gateway/certbot/certbot-var:/var/lib/letsencrypt
+    networks:
+      - net-app-qr-prod
+
+networks:
+  net-app-qr-prod:

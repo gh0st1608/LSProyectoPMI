@@ -32,10 +32,8 @@ export default class Util {
       const pathSource = path.join(__dirname,'..')
       const pathQr = pathSource + '/uploads/qr'
       const pathMailing = pathSource + '/resources/mailing'
-      const pathCerts = pathSource + '/certs'
       fs.mkdirSync(pathQr,{recursive:true});
       fs.mkdirSync(pathMailing,{recursive:true});
-      fs.mkdirSync(pathCerts);
     }
 
     static async copyFile() : Promise<void> {

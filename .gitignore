@@ -31,7 +31,6 @@ ProyectoQR-Backend/env.yaml
 ProyectoQR-Backend/nodemon.json
 ProyectoQR-Backend/mock
 ProyectoQR-Backend/dist
-ProyectoQR-Backend/deploy
 ProyectoQR-Backend/Dockerfile.backend.dev
 ProyectoQR-Backend/certs
 ProyectoQR-Backend/src/resources/mailing/adjunto.pdf
