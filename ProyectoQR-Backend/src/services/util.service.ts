@@ -48,38 +48,33 @@ export default class Util {
     static async sleep (ms : number){
       return new Promise(resolve => setTimeout(resolve, ms));
   };
-
-  static async jobProcess (arrayCorreos : Array<String>,arrayNombres : Array<String>,arrayQrs : Array<String> ){
+  static async jobProcess (arrayCorreos : Array<String>,arrayNombres : Array<String>,arrayQrs : Array<String>, iteraciones : number ){
     const conDb = AppService.MONGO_HOST != '127.0.0.1' 
       ? `mongodb+srv://${AppService.MONGO_USERNAME}:${AppService.MONGO_PASSWORD}@${AppService.MONGO_HOST}/asistencia?authSource=admin&retryWrites=true&w=majority`
       : `mongodb://${AppService.MONGO_USERNAME}:${AppService.MONGO_PASSWORD}@${AppService.MONGO_HOST}:${AppService.MONGO_PORT}/asistencia?authSource=admin&retryWrites=true&w=majority` 
-    console.log(conDb)
-    console.log(arrayCorreos,arrayNombres,arrayQrs)
-    console.log(AppService.MONGO_HOST)
-    console.log(AppService.MONGO_USERNAME)
-    console.log(AppService.MONGO_PASSWORD)
-    console.log(AppService.MONGO_PORT)
-
+    
+    console.log('parte2 ',iteraciones)
     const agenda = new Agenda({db: {address: conDb}});
-    agenda.define('sendMail', function() : any {
-      if (arrayCorreos.length != 0) {
+    agenda.define('sendMail', async function() : Promise<void> {
+      if (iteraciones > 0) {
+        console.log('parte3 ',iteraciones)
         const emailUlt = arrayCorreos.pop()
         const nombreUlt = arrayNombres.pop()
         const urlQrUlt = arrayQrs.pop()
-        EmailsService.sendMailParticipant(emailUlt,nombreUlt,urlQrUlt)
+        await EmailsService.sendMailParticipant(emailUlt,nombreUlt,urlQrUlt)
+        iteraciones = iteraciones - 1
       }else{
         setTimeout(function() {
           agenda.cancel({name: 'sendMail'});
       })
     }
+    
      
     });
 
     agenda.on('ready', function() {
-      agenda.every('20 seconds', 'sendMail');
-      agenda.start(); 
-
-      
+      agenda.every('30 seconds', 'sendMail');
+      agenda.start();       
     });
   }
 }

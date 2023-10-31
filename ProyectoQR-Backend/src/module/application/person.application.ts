@@ -35,7 +35,6 @@ export default class PersonApplication {
         objPerson.urlQr = await QrService.saveQrToS3(objPerson.documento.toString())
         await this.create(objPerson)  
     })
-    console.log('ANTES DE ENTRAR AL JOBSENDMAIL')
     await UtilService.sleep(10000)
     await this.jobSendMail()
   }
@@ -43,16 +42,19 @@ export default class PersonApplication {
   async jobSendMail() {
     const filtro = { asistencia : "R" }
     const persons = await this.repositoryPerson.findPersonsByParam(filtro)
+    const iteraciones = persons.length
     const arrayCorreos = new Array<String>
     const arrayNombres = new Array<String>
     const arrayQrs = new Array<String>  
-    persons.forEach((item) => {
+    persons.forEach(async (item) => {
       arrayCorreos.push(item.correo)
       arrayNombres.push(item.nombres)
       arrayQrs.push(item.urlQr)
+      await this.updateNotificate(item.id,'','MACHINE')
     })
-    console.log('ENTRO AL JOBSENDMANIL')
-    await UtilService.jobProcess(arrayCorreos,arrayNombres,arrayQrs)
+    console.log('parte1',iteraciones)
+    await UtilService.jobProcess(arrayCorreos,arrayNombres,arrayQrs,iteraciones)
+    
     
   }
 
@@ -92,6 +94,12 @@ export default class PersonApplication {
   async updatePresence(id : string, type: string, user :string): Promise<Person | null> {
     const filterId = { id : id }
     const update = { asistencia : 'A', type : type, user: user }
+    return await this.repositoryPerson.update(filterId,update);
+  }
+
+  async updateNotificate(id : string, type: string, user :string): Promise<Person | null> {
+    const filterId = { id : id }
+    const update = { asistencia : 'N', type : type, user: user }
     return await this.repositoryPerson.update(filterId,update);
   }
 
