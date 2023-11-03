@@ -11,11 +11,14 @@ export default class extends Bootstrap {
       const port = EnvironmentVariables.MONGO_PORT;
       const database = "asistencia";
       const authSource = "admin";
+      console.log(host)
+      
 
-      const connectionString = EnvironmentVariables.MONGO_HOST != '127.0.0.1' 
-      ? `mongodb+srv://${username}:${password}@${host}/${database}?authSource=${authSource}&retryWrites=true&w=majority`
-      : `mongodb://${username}:${password}@${host}:${port}/${database}?authSource=${authSource}&retryWrites=true&w=majority`
 
+      const connectionString = EnvironmentVariables.MONGO_HOST == '127.0.0.1' ||  EnvironmentVariables.MONGO_HOST == 'mongo-app-backend-qr-dev'
+      ? `mongodb://${username}:${password}@${host}:${port}/${database}?authSource=${authSource}&retryWrites=true&w=majority`
+      : `mongodb+srv://${username}:${password}@${host}/${database}?authSource=${authSource}&retryWrites=true&w=majority`
+      
       const options = {
         minPoolSize: 5,
         maxPoolSize: 10,

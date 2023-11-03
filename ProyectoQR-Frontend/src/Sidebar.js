@@ -22,7 +22,7 @@ function Sidebar() {
             <li className="nav-item active">
                 <Link className="nav-link" to="/portal/upload">
                     <FontAwesomeIcon icon={faTachographDigital} style={{ marginRight: "0.5rem" }} />
-                    <span>Upload</span>
+                    <span>Enviar Correo</span>
                 </Link>
             </li>
             {/* <!-- Divider --> */}
@@ -32,7 +32,7 @@ function Sidebar() {
             <li className="nav-item active">
                 <Link className="nav-link" to="/portal/person-list">
                     <FontAwesomeIcon icon={faUsers} style={{ marginRight: "0.5rem" }} />
-                    <span>Personas</span>
+                    <span>Lista Asistentes</span>
                 </Link>
             </li>
 
