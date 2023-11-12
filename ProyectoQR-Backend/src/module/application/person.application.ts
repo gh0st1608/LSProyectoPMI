@@ -17,41 +17,44 @@ export default class PersonApplication {
   
 
   async insertFile(filename : any) : Promise<void>{
-    const jsonFile = await UtilService.readFile(filename);
-    
-    jsonFile.forEach(async (item : Person) => {
+    const personList: Array<Person> = await UtilService.readFile(filename);
+    console.log(personList)
+    for(const person of personList){
       const objPerson = new Person(
-        item.id,
-        item.documento,
-        item.nombres,
-        item.correo,
-        item.correoCopia,
-        item.tipoAsistente,
-        item.categoria,
-        item.observaciones,
-        item.comentario
-        )
-        await QrService.makeFileQr(objPerson.documento.toString())
-        objPerson.urlQr = await QrService.saveQrToS3(objPerson.documento.toString())
-        await this.create(objPerson)  
-    })
-
-    await UtilService.sleep(10000)
+        person.id,
+        person.documento,
+        person.nombres,
+        person.correo,
+        person.correoCopia,
+        person.tipoAsistente,
+        person.categoria,
+        person.observaciones,
+        person.comentario
+      )
+      await QrService.makeFileQr(objPerson.documento.toString())
+      objPerson.urlQr = await QrService.saveQrToS3(objPerson.documento.toString())
+      await this.create(objPerson)  
+    }
     await this.jobSendMail()
   }
 
   async jobSendMail() {
     const filtro = { asistencia : "R" }
     const persons = await this.repositoryPerson.findPersonsByParam(filtro)
+    const iteraciones = persons.length
     const arrayCorreos = new Array<String>
     const arrayNombres = new Array<String>
     const arrayQrs = new Array<String>  
-    persons.forEach((item) => {
+    persons.forEach(async (item, index) => {
+      console.log("Person", index, new Date())
       arrayCorreos.push(item.correo)
       arrayNombres.push(item.nombres)
       arrayQrs.push(item.urlQr)
+      await this.updateNotificate(item.id,'','MACHINE') // 10
+      await UtilService.sleep(10000)
     })
-    await UtilService.jobProcess(arrayCorreos,arrayNombres,arrayQrs)
+    await UtilService.jobProcess(arrayCorreos,arrayNombres,arrayQrs,iteraciones)
+    
     
   }
 
@@ -91,6 +94,12 @@ export default class PersonApplication {
   async updatePresence(id : string, type: string, user :string): Promise<Person | null> {
     const filterId = { id : id }
     const update = { asistencia : 'A', type : type, user: user }
+    return await this.repositoryPerson.update(filterId,update);
+  }
+
+  async updateNotificate(id : string, type: string, user :string): Promise<Person | null> {
+    const filterId = { id : id }
+    const update = { asistencia : 'N', type : type, user: user }
     return await this.repositoryPerson.update(filterId,update);
   }
 

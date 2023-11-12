@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer'
+import nodemailer from 'nodemailer';
 import EnvironmentVariables from "../services/app.service";
 import fs from "fs";
 import path  from 'path';

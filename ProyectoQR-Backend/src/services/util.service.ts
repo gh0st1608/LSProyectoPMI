@@ -1,10 +1,15 @@
 import XLSX from 'xlsx';
 import path from 'path';
 import fs from 'fs';
-import Agenda from "agenda"
+import Agenda, {Job} from "agenda"
 import AppService from "../services/app.service";
 import EmailsService from "../services/email.service";
 
+interface EmailJob{
+  email: string;
+  nombre: string;
+  urlQr: string;
+}
 export default class Util {
 
     static async readFile (filename: string) : Promise<any> {
@@ -32,10 +37,8 @@ export default class Util {
       const pathSource = path.join(__dirname,'..')
       const pathQr = pathSource + '/uploads/qr'
       const pathMailing = pathSource + '/resources/mailing'
-      const pathCerts = pathSource + '/certs'
       fs.mkdirSync(pathQr,{recursive:true});
       fs.mkdirSync(pathMailing,{recursive:true});
-      fs.mkdirSync(pathCerts);
     }
 
     static async copyFile() : Promise<void> {
@@ -50,30 +53,25 @@ export default class Util {
     static async sleep (ms : number){
       return new Promise(resolve => setTimeout(resolve, ms));
   };
-
-  static async jobProcess (arrayCorreos : Array<String>,arrayNombres : Array<String>,arrayQrs : Array<String> ){
-    const conDb = `mongodb://${AppService.MONGO_USERNAME}:${AppService.MONGO_PASSWORD}@${AppService.MONGO_HOST}:${AppService.MONGO_PORT}/jobs?authSource=admin`
+  static async jobProcess (arrayCorreos : Array<String>, arrayNombres : Array<String>,arrayQrs : Array<String>, iteraciones : number ){
+    const conDb = AppService.MONGO_HOST == '127.0.0.1' || AppService.MONGO_HOST == 'mongo-app-backend-qr-dev'
+      ? `mongodb://${AppService.MONGO_USERNAME}:${AppService.MONGO_PASSWORD}@${AppService.MONGO_HOST}:${AppService.MONGO_PORT}/asistencia?authSource=admin&retryWrites=true&w=majority`
+      : `mongodb+srv://${AppService.MONGO_USERNAME}:${AppService.MONGO_PASSWORD}@${AppService.MONGO_HOST}/asistencia?authSource=admin&retryWrites=true&w=majority`
+    
 
     const agenda = new Agenda({db: {address: conDb}});
-    agenda.define('sendMail', function() : any {
-      if (arrayCorreos.length != 0) {
-        const emailUlt = arrayCorreos.pop()
-        const nombreUlt = arrayNombres.pop()
-        const urlQrUlt = arrayQrs.pop()
-        EmailsService.sendMailParticipant(emailUlt,nombreUlt,urlQrUlt)
-      }else{
-        setTimeout(function() {
-          agenda.cancel({name: 'sendMail'});
+    agenda.define('send-email', { concurrency: 1 }, async function(job: Job<EmailJob>) : Promise<void> {
+      console.log("Running at", new Date(), job.attrs.data)
+      const { email, nombre, urlQr } = job.attrs.data;
+      await EmailsService.sendMailParticipant(email, nombre, urlQr)
+    })
+    await agenda.start()
+    for(let i =0; i < iteraciones; i ++){
+      await agenda.schedule(`in ${i*10} seconds`, "send-email", {
+        email: arrayCorreos[i],
+        nombre: arrayNombres[i],
+        urlQr: arrayQrs[i] 
       })
     }
-     
-    });
-
-    agenda.on('ready', function() {
-      agenda.every('20 seconds', 'sendMail');
-      agenda.start(); 
-
-      
-    });
   }
 }

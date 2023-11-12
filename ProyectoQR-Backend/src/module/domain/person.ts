@@ -2,7 +2,7 @@
 import {uuid}  from "uuidv4"
 
 export default class Person {
-   readonly id?:string;
+   readonly id:string;
    readonly documento: string;
    readonly nombres: string;
    readonly correo: string;
