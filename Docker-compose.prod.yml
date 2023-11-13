@@ -38,6 +38,7 @@ services:
       - ./ProyectoQR-Frontend/webserver/default.conf:/etc/nginx/conf.d/default.conf
       - ./ProyectoQR-Frontend/webserver/certbot-etc:/etc/letsencrypt
       - ./ProyectoQR-Frontend/webserver/certbot-var:/var/lib/letsencrypt
+      - web-root:/usr/share/nginx/html
     depends_on:
       - app-backend-qr-prod
     networks:
@@ -49,11 +50,13 @@ services:
     volumes:
       - ./ProyectoQR-Frontend/webserver/certbot-etc:/etc/letsencrypt
       - ./ProyectoQR-Frontend/webserver/certbot-var:/var/lib/letsencrypt
-      - ./ProyectoQR-Frontend/build:/usr/share/nginx/html
+      - web-root:/usr/share/nginx/html
     depends_on:
       - app-frontend-qr-prod
     command: certonly --webroot --webroot-path=/usr/share/nginx/html --email erickmga123@gmail.com --agree-tos --no-eff-email --staging -d latam-strategy.com 
 
+volumes:
+  web-root:
 
 networks:
   net-app-qr-prod:
