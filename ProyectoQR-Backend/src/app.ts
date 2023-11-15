@@ -26,9 +26,9 @@ class App {
 
   
   mountRoutes() {
-    this.expressApp.use("/api", routerPerson,routerAuth);
+    this.expressApp.use("/", routerPerson,routerAuth);
     this.expressApp.use('/static',express.static(path.join(__dirname, 'uploads/qr/')))
-    this.expressApp.get("/", (req: Request, res: Response) => {
+    this.expressApp.get("/ping", (req: Request, res: Response) => {
       res.send("All's ok");
     });
   }

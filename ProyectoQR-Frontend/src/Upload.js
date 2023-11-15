@@ -18,7 +18,7 @@ function UploadFile() {
             files.append("files",archivos[index]);
         }
         console.log(files)
-        await axios.post(`${url}/api/insert-file`,files,{headers:{'Content-type' : 'multipart/form-data'}})
+        await axios.post(`${url}/insert-file`,files,{headers:{'Content-type' : 'multipart/form-data'}})
         .then(response => {
                 console.log(response.data)
             }).catch(error => {

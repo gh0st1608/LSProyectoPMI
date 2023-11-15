@@ -49,7 +49,7 @@ function PersonCreate() {
         console.log(values)
         try {
           setLoading(true);
-          await axios.post(`${url}/api/create-person`, values);
+          await axios.post(`${url}/create-person`, values);
           navigate("/portal/person-list");
         } catch (error) {
           console.log(error);

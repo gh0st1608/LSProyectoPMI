@@ -53,7 +53,8 @@ services:
       - web-root:/usr/share/nginx/html
     depends_on:
       - app-frontend-qr-prod
-    command: certonly --webroot --webroot-path=/usr/share/nginx/html --email erickmga123@gmail.com --agree-tos --no-eff-email --staging -d latam-strategy.com 
+    command: certonly --webroot --webroot-path=/usr/share/nginx/html --email erickmga123@gmail.com --agree-tos --no-eff-email --staging -d latam-strategy.com # 1 Paso
+    #command: certonly --webroot --webroot-path=/usr/share/nginx/html --email erickmga123@gmail.com --agree-tos --no-eff-email --force-renewal -d latam-strategy.com 2 Paso
 
 volumes:
   web-root:

@@ -10,6 +10,9 @@ ProyectoQR-Frontend/dist
 ProyectoQR-Frontend/dist-ssr
 ProyectoQR-Frontend/.env
 ProyectoQR-Frontend/.env-cmdrc.json
+ProyectoQR-Frontend/webserver/certbot-etc
+ProyectoQR-Frontend/webserver/certbot-var
+ProyectoQR-Frontend/webserver/log
 
 
 

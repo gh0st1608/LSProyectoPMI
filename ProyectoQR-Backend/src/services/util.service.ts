@@ -52,26 +52,38 @@ export default class Util {
 
     static async sleep (ms : number){
       return new Promise(resolve => setTimeout(resolve, ms));
-  };
-  static async jobProcess (arrayCorreos : Array<String>, arrayNombres : Array<String>,arrayQrs : Array<String>, iteraciones : number ){
-    const conDb = AppService.MONGO_HOST == '127.0.0.1' || AppService.MONGO_HOST == 'mongo-app-backend-qr-dev'
-      ? `mongodb://${AppService.MONGO_USERNAME}:${AppService.MONGO_PASSWORD}@${AppService.MONGO_HOST}:${AppService.MONGO_PORT}/asistencia?authSource=admin&retryWrites=true&w=majority`
-      : `mongodb+srv://${AppService.MONGO_USERNAME}:${AppService.MONGO_PASSWORD}@${AppService.MONGO_HOST}/asistencia?authSource=admin&retryWrites=true&w=majority`
-    
+    };
 
-    const agenda = new Agenda({db: {address: conDb}});
-    agenda.define('send-email', { concurrency: 1 }, async function(job: Job<EmailJob>) : Promise<void> {
-      console.log("Running at", new Date(), job.attrs.data)
-      const { email, nombre, urlQr } = job.attrs.data;
-      await EmailsService.sendMailParticipant(email, nombre, urlQr)
-    })
-    await agenda.start()
-    for(let i =0; i < iteraciones; i ++){
-      await agenda.schedule(`in ${i*10} seconds`, "send-email", {
-        email: arrayCorreos[i],
-        nombre: arrayNombres[i],
-        urlQr: arrayQrs[i] 
+
+
+    static async jobProcess (arrayCorreos : Array<String>, arrayNombres : Array<String>,arrayQrs : Array<String>, iteraciones : number ){
+      const conDb = AppService.MONGO_HOST == '127.0.0.1' || AppService.MONGO_HOST == 'mongo-app-backend-qr-dev'
+        ? `mongodb://${AppService.MONGO_USERNAME}:${AppService.MONGO_PASSWORD}@${AppService.MONGO_HOST}:${AppService.MONGO_PORT}/asistencia?authSource=admin&retryWrites=true&w=majority`
+        : `mongodb+srv://${AppService.MONGO_USERNAME}:${AppService.MONGO_PASSWORD}@${AppService.MONGO_HOST}/asistencia?authSource=admin&retryWrites=true&w=majority`
+      
+
+      const agenda = new Agenda({db: {address: conDb}});
+      agenda.define('send-email', { concurrency: 1 }, async function(job: Job<EmailJob>) : Promise<void> {
+        console.log("Running at", new Date(), job.attrs.data)
+        const { email, nombre, urlQr } = job.attrs.data;
+        await EmailsService.sendMailParticipant(email, nombre, urlQr)
       })
+      await agenda.start()
+      for(let i =0; i < iteraciones; i ++){ //20
+        const whenToRun = await this.convert(i * 10);
+        await agenda.schedule(whenToRun, "send-email", {
+          email: arrayCorreos[i],
+          nombre: arrayNombres[i],
+          urlQr: arrayQrs[i] 
+        })
+      }
     }
-  }
+
+
+    static async convert(seconds : any) {
+      const now = new Date();
+      const milliseconds = seconds * 1000;
+      return new Date(now.getTime() + milliseconds);
+    }
+
 }

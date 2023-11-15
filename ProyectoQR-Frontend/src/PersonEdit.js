@@ -16,7 +16,7 @@ function PersonEdit() {
 
     let getPersonData = async () => {
         try {
-            const person = await axios.get(`${url}/api/get-person/${params.id}`);
+            const person = await axios.get(`${url}/get-person/${params.id}`);
             myFormik.setValues(person.data);
             setLoading(false);
         } catch (error) {
@@ -56,7 +56,7 @@ function PersonEdit() {
             try {
                 setLoading(true);
                 const obj = {documento: values.documento, nombres: values.nombres, correo: values.correo, tipoAsistente: values.tipoAsistente}
-                await axios.put(`${url}/api/put-person/${params.id}`, obj);
+                await axios.put(`${url}/put-person/${params.id}`, obj);
                 setLoading(false);
                 navigate("/portal/person-list")
             } catch (error) {

@@ -18,7 +18,7 @@ function PersonView() {
 
     let getPersons = async () => {
         try {
-            const person = await axios.get(`${url}/api/get-person/${params.id}`);
+            const person = await axios.get(`${url}/get-person/${params.id}`);
             setPersonList(person.data);
             setLoading(false);
         } catch (error) {
