@@ -5,7 +5,7 @@ class Vars {
     }
     // Getter
     getApi(){
-        const api = `${process.env.REACT_APP_API_HOSTNAME}:${process.env.REACT_APP_API_PORT}`;
+        const api = `${process.env.REACT_APP_API_HOSTNAME}`;
       return api
     }
 
