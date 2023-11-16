@@ -44,3 +44,4 @@ ProyectoQR-Backend/src/resources/mailing/template.html
 
 Docker-compose.dev.yml
 Docker-compose.qa.yml
+Docker-compose.de.yml

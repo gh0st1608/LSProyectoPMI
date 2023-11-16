@@ -94,7 +94,7 @@ function PersonEdit() {
 
                         <div className="col-lg-6">
                             <label>E-Mail</label>
-                            <input name='email' value={myFormik.values.correo} onChange={myFormik.handleChange} type={"mail"}
+                            <input name='correo' value={myFormik.values.correo} onChange={myFormik.handleChange} type={"mail"}
                                 className={`form-control ${myFormik.errors.correo ? "is-invalid" : ""} `} />
                             <span style={{ color: "red" }}>{myFormik.errors.correo}</span>
                         </div>

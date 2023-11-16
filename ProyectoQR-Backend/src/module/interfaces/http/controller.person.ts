@@ -44,9 +44,9 @@ export default class {
 
   async putPersonById(req: Request, res: Response) {
     const { id } = req.params;
-    const {documento, nombres, tipoAsistente, email} = req.body;
+    const {documento, nombres, tipoAsistente, correo} = req.body;
     console.log(documento)
-    const result = await this.application.putPersonById(id,documento,nombres,tipoAsistente,email);
+    const result = await this.application.putPersonById(id,documento,nombres,tipoAsistente,correo);
     res.json({personUpd : result})
   }
 

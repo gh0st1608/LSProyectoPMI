@@ -69,9 +69,9 @@ export default class PersonApplication {
     return result;
   }
 
-  async putPersonById(id : string, documento :string, nombres : string, tipoAsistente : string, email : string): Promise<Person | null> {
+  async putPersonById(id : string, documento :string, nombres : string, tipoAsistente : string, correo : string): Promise<Person | null> {
     const filter = {id : id}
-    const update = { documento: documento, nombres: nombres, tipoAsistente:tipoAsistente, email: email}
+    const update = { documento: documento, nombres: nombres, tipoAsistente:tipoAsistente, correo: correo}
     return await this.repositoryPerson.update(filter,update);
   }
 
