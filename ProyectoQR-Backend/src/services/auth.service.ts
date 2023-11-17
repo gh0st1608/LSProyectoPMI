@@ -16,7 +16,7 @@ export default class AuthAppService {
       iat: moment().unix(),
       exp: moment().add(EnvironmentVariables.TOKEN_TIMEOUT, "minutes").unix(),
     };
-
+    console.log(jwt.encode(payload, EnvironmentVariables.TOKEN_SECRET_WORD))
     return jwt.encode(payload, EnvironmentVariables.TOKEN_SECRET_WORD);
   }
 

@@ -38,7 +38,7 @@ export default class Email {
                 const htmlToSend = template(replacements).replace('${pathqr}',urlImg);
                 const options = {
                     from : `CONGRESO INTERNACIONAL ${EnvironmentVariables.MAIL_USERNAME}`,
-                    to : `${correoTarget}, egalindoa@uni.pe`,
+                    to : `${correoTarget}, patricia.montero@pmi.org.pe`,
                     subject : 'XV Congreso Internacional de Dirección de Proyectos PMI 2023 ',
                     html : htmlToSend,
                     attachments: [

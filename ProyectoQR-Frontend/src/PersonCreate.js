@@ -31,7 +31,7 @@ function PersonCreate() {
           errors.documento = "Porfavor ingresar documento";
       } else if (values.documento.length < 8) {
           errors.documento = "Documento no debería ser menor a 8 letras";
-      } else if (values.nombres.length > 16) {
+      } else if (values.documento.length > 16) {
           errors.documento = "Documento no debería ser mayor a 15 letras";
       }
       
